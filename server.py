@@ -2,6 +2,7 @@ import socket
 from _thread import *
 from player import Player
 import pickle
+
 # IP to which everyone will connect
 server = "192.168.0.102"
 port = 5555
