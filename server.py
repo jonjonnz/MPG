@@ -1,6 +1,5 @@
 import socket
 from _thread import *
-from player import Player
 import pickle
 
 # IP to which everyone will connect
@@ -15,8 +14,6 @@ except Exception as err:
     print(err)
 s.listen()
 print("Server started (Waiting for connection)...")
-
-clients = [Player(0, 0, 50, 50, (0, 0, 255)), Player(0, 0, 50, 50, (0, 255, 0))]
 
 
 # Threading the clients to run multiple at the same time
