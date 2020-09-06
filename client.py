@@ -7,6 +7,24 @@ COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
 FONT = pygame.font.Font(None, 32)
 
+# Default Screen size
+width = 800
+height = 600
+
+# Folder Structures for images
+game_folder = os.path.dirname(__file__)
+img_folder = os.path.join(game_folder, "images")
+bg_img_folder = os.path.join(img_folder, "background")
+
+# Load images
+background_img = pygame.image.load(os.path.join(bg_img_folder, "mainscreen.jpg"))
+background_img = pygame.transform.scale(background_img, (width, height))
+
+# Button Defaults
+button_row = 100
+button_column = 100
+button_color = (0, 200, 0)
+
 
 class InputBox:
 
@@ -72,10 +90,9 @@ def draw_text(surf, text, size, x, y, color):
 def main_screen():
     """Main screen loop"""
     # Buttons for game to connect to a new game or an existing one
-    new_game_button = pygbutton.PygButton((button_column, button_row, 100, 50), 'New Game', button_color)
-    existing_game_button = pygbutton.PygButton((button_column, button_row + 75, 100, 50), 'Join Existing', button_color)
+    connect_game_button = pygbutton.PygButton((button_column, button_row, 100, 50), 'New Game', button_color)
     quit_game_button = pygbutton.PygButton((button_column, button_row + 150, 100, 50), 'Quit', button_color)
-    buttons = {'new': new_game_button, 'existing': existing_game_button, 'quit': quit_game_button}
+    buttons = {'connect': connect_game_button, 'quit': quit_game_button}
     run = True
     while run:
         clock.tick(60)
@@ -83,34 +100,14 @@ def main_screen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if 'click' in buttons['new'].handleEvent(event):
-                start_new_game()
-            elif 'click' in buttons['existing'].handleEvent(event):
-                join_existing_game()
+            if 'click' in buttons['connect'].handleEvent(event):
+                connect_game()
             elif 'click' in buttons['quit'].handleEvent(event):
                 run = False
 
         draw_main_screen(screen, buttons.values())
     pygame.quit()
 
-
-# Default Screen size
-width = 800
-height = 600
-
-# Folder Structures for images
-game_folder = os.path.dirname(__file__)
-img_folder = os.path.join(game_folder, "images")
-bg_img_folder = os.path.join(img_folder, "background")
-
-# Load images
-background_img = pygame.image.load(os.path.join(bg_img_folder, "mainscreen.jpg"))
-background_img = pygame.transform.scale(background_img, (width, height))
-
-# Button Defaults
-button_row = 100
-button_column = 100
-button_color = (0, 200, 0)
 
 # Initialization and creating a window
 pygame.init()
@@ -119,7 +116,6 @@ pygame.display.set_caption("MPG-Test")
 clock = pygame.time.Clock()
 
 main_screen()
-
 
 # def main():
 #     clock = pygame.time.Clock()
