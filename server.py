@@ -13,15 +13,18 @@ try:
     s.bind((server, port))
 except Exception as err:
     print(err)
-s.listen()
+s.listen(6)
 print("Server started (Waiting for connection)...")
 
-clients = [Player(0, 0, 0, 0, (0, 0, 255)), Player(0, 0, 50, 50, (0, 255, 0))]
+# 6 Players per server
+clients = [Player(0, 0, 0, 0, (0, 0, 255)), Player(0, 0, 50, 50, (0, 255, 0)), Player(0, 0, 50, 50, (0, 255, 0)),
+           Player(0, 0, 50, 50, (0, 255, 0)), Player(0, 0, 50, 50, (0, 255, 0)), Player(0, 0, 50, 50, (0, 255, 0))]
 
 
 # Threading the clients to run multiple at the same time
 def threaded_clients(client_connection, client):
-    client_connection.send(pickle.dumps(clients[client]))
+    client_connection.send(pickle.dumps(clients[client]))  # Send back current player on the first connection
+    reply = []
     # Making the thread run infinitely
     while True:
         try:
@@ -31,12 +34,12 @@ def threaded_clients(client_connection, client):
                 print('Disconnected')
                 break
             else:
-                if client == 1:
-                    reply = clients[0]
-                else:
-                    reply = clients[1]
+                for i in range(6):
+                    if i != client:
+                        reply.append(clients[i])    # Add other players to reply except current client
 
             client_connection.sendall(pickle.dumps(reply))
+            reply = []
         except Exception as err:
             print('Client disconnected', err)
             break
